@@ -3,13 +3,13 @@
 \chapter{基于公开多芯光纤散斑数据集的神经网络成像实验}\label{chap:preliminary}
 
 {
-本章围绕公开的“散斑—目标图像”配对数据集开展前期研究工作：基于\citet{sun2024ol_calibrationfree}公开的数据集，对神经网络重建方法进行验证实验，并通过结构相似度（SSIM）衡量手写数字数据集与服装数据集的重建效果。本章的目的在于建立公开数据集上的验证流程与对照基准，为第\ref{chap:method}章的自建实验系统与方法验证提供参照。
+本章围绕公开的“散斑—目标图像”配对数据集开展前期研究工作：基于公开的数据集\citep{sun2023_figshare_dataset1,sun2023_figshare_dataset2}，对神经网络重建方法进行验证实验，并通过结构相似度（SSIM）衡量手写数字数据集与服装数据集的重建效果。本章的目的在于建立公开数据集上的验证流程与对照基准，为第\ref{chap:method}章的自建实验系统与方法验证提供参照。
 
 \section{公开数据集与任务定义}\label{sec:public_dataset}
 
 \subsection{数据集来源}\label{sec:dataset_source}
 
-本研究第三章主要参考\citet{sun2024ol_calibrationfree}末尾公开的数据集，该工作面向多芯光纤（Multi-core Fiber, MCF）定量相位成像任务，构建了端到端深度学习的“散斑到相位”重建范式，并公开了两份实验数据集：手写数字数据集与服装数据集及其对应的光学散斑图像\citep{sun2023_figshare_dataset1,sun2023_figshare_dataset2}。
+本研究第三章主要参考公开的数据集，该工作面向多芯光纤（Multi-core Fiber, MCF）定量相位成像任务，构建了端到端深度学习的“散斑到相位”重建范式，并公开了两份实验数据集：手写数字数据集与服装数据集及其对应的光学散斑图像\citep{sun2023_figshare_dataset1,sun2023_figshare_dataset2}。
 
 从本论文的角度看，这两份公开数据集为散斑图像重建提供了良好的验证平台：输入为检测端采集的散斑强度图，输出为对应的目标图像（本文用"目标图像"统称其相位或强度表征），可将问题统一为监督学习的图像到图像映射任务。
 
@@ -23,7 +23,7 @@
 
 \subsection{数据集特征与划分}\label{sec:dataset_stats}
 
-\citet{sun2024ol_calibrationfree}报告其公开数据集包含大量成对样本（散斑、目标图像），并包含两类目标内容：手写数字与服装图像。本章基于下载获取的公开数据集进行实验验证，具体数据划分如下：
+公开数据集包含大量成对样本（散斑、目标图像），并包含两类目标内容：手写数字与服装图像。本章基于下载获取的公开数据集进行实验验证，具体数据划分如下：
 
 \paragraph{手写数字数据集} 该数据集包含手写数字（0-9）及其对应的光学散斑图像，共计29,379张配对样本。按照编号进行划分：训练集26,001张（编号0\textasciitilde26000），用于网络参数学习；验证集3,300张（编号26001\textasciitilde29300），用于选择超参数与监控收敛过程；测试集78张（编号29301\textasciitilde29378），用于最终性能评估与可视化展示。
 
@@ -50,14 +50,14 @@
 
 \subsection{数据集特征与使用方式}\label{sec:dataset_preprocess}
 
-\citet{sun2024ol_calibrationfree}公开的数据集已经过完整的实验采集与预处理，可直接用于神经网络训练。数据集的主要特征如下：
+公开的数据集已经过完整的实验采集与预处理，可直接用于神经网络训练。数据集的主要特征如下：
 \begin{itemize}
     \item \textbf{图像尺寸}：所有散斑图像与目标图像均为$128\times 128$像素的灰度图像，尺寸统一，无需额外裁剪或缩放。
     \item \textbf{数据格式}：图像以标准格式存储（如PNG等），像素值范围通常为$[0, 255]$的8位整数。
     \item \textbf{配对关系}：每个散斑图像与其对应的目标图像按编号一一对应，便于构建训练数据对。
 \end{itemize}
 
-在模型训练时，仅需将图像像素值归一化到$[0,1]$区间（除以255），以匹配网络输出层Sigmoid激活函数的值域。本章实验未使用数据增强技术（如随机翻转、旋转等），以保持与参考文献\citep{sun2024ol_calibrationfree}的可比性。数据加载使用PyTorch的DataLoader模块，支持批量读取与GPU加速训练。
+在模型训练时，仅需将图像像素值归一化到$[0,1]$区间（除以255），以匹配网络输出层Sigmoid激活函数的值域。本章实验未使用数据增强技术（如随机翻转、旋转等），以保持与公开数据集的可比性。数据加载使用PyTorch的DataLoader模块，支持批量读取与GPU加速训练。
 
 \section{神经网络模型与实验设置}\label{sec:baseline_unet}
 
@@ -65,7 +65,7 @@
 
 本章采用编码器-解码器结构的U-Net神经网络作为重建模型，用于学习散斑图像到目标图像的映射关系。该类模型具备多尺度特征提取与细节恢复能力，适用于图像到图像的重建任务。
 
-网络架构参考\citet{sun2024ol_calibrationfree}论文中的结构示意图（见图\ref{fig:unet_arch}），由于原作者使用MATLAB实现，本研究采用Python语言与PyTorch深度学习框架进行复现。网络结构采用经典的U-Net编码器-解码器架构，具体包括：
+网络架构参考公开数据集相关工作的结构示意图（见图\ref{fig:unet_arch}），由于原作者使用MATLAB实现，本研究采用Python语言与PyTorch深度学习框架进行复现。网络结构采用经典的U-Net编码器-解码器架构，具体包括：
 
 \begin{itemize}
     \item \textbf{编码器（Encoder）}：包含4个下采样阶段，每阶段由2个卷积块和1个最大池化层组成，通道数依次为128、256、512、1024。每次下采样后应用Dropout2D正则化（丢弃率0.3）以防止过拟合。
@@ -90,8 +90,8 @@
     \centering
     \includegraphics[width=0.90\textwidth]{Img/3/3-1.png}
     \captionsetup{justification=centering,singlelinecheck=false}
-    \bicaption{\enspace U-Net网络结构示意图\citep{sun2024ol_calibrationfree}}
-              {\enspace U-Net Network Architecture Diagram\citep{sun2024ol_calibrationfree}}
+    \bicaption{\enspace U-Net网络结构示意图}
+              {\enspace U-Net Network Architecture Diagram}
     \label{fig:unet_arch}
 \end{figure}
 
@@ -270,13 +270,13 @@ SSIM的计算公式为：
     \end{tabular}
 \end{table}
 
-从表\ref{tab:public_quant}可以看出，手写数字数据集的平均SSIM达到0.982，且所有78张测试样本的SSIM值均保持在0.96以上（如图\ref{fig:mnist_ssim_dist}所示），显示出较高的重建稳定性和一致性。结合图\ref{fig:mnist_result}展示的全部测试样本重建结果，可以观察到网络对不同手写数字（0-9）均能实现高质量重建。该结果与\citet{sun2024ol_calibrationfree}报告的实验结论基本吻合，验证了基于Python+PyTorch复现实现的有效性。
+从表\ref{tab:public_quant}可以看出，手写数字数据集的平均SSIM达到0.982，且所有78张测试样本的SSIM值均保持在0.96以上（如图\ref{fig:mnist_ssim_dist}所示），显示出较高的重建稳定性和一致性。结合图\ref{fig:mnist_result}展示的全部测试样本重建结果，可以观察到网络对不同手写数字（0-9）均能实现高质量重建。该结果验证了基于Python+PyTorch复现实现的有效性。
 
 服装数据集的平均SSIM为0.922，SSIM范围为0.750\textasciitilde0.984。相比手写数字数据集，服装数据集的平均SSIM略低，SSIM值分布范围更广（如图\ref{fig:fashion_ssim_dist}所示），这与服装图像包含更丰富的纹理细节和更复杂的结构特征直接相关。尽管如此，绝大多数样本的SSIM值仍保持在0.85以上，表明网络在面对更复杂的重建任务时仍能保持较好的性能表现。
 
 \subsection{与参考文献结果的关系}\label{sec:compare_paper}
 
-\citet{sun2024ol_calibrationfree}报告其端到端网络在实验数据上可实现毫秒级重建，并取得较高保真度。本研究采用跨平台复现策略：原作者使用MATLAB实现，本研究基于Python+PyTorch 2.0.1框架，根据论文网络结构示意图自行搭建U-Net模型。通过邮件联系原作者确认网络设计思路后，采用MAE损失函数、Adam优化器（学习率$1\times 10^{-4}$，指数衰减gamma=0.85）进行训练。
+端到端网络在实验数据上可实现毫秒级重建，并取得较高保真度。本研究采用跨平台复现策略：原作者使用MATLAB实现，本研究基于Python+PyTorch 2.0.1框架，根据网络结构示意图自行搭建U-Net模型。采用MAE损失函数、Adam优化器（学习率$1\times 10^{-4}$，指数衰减gamma=0.85）进行训练。
 
 实验结果显示，本研究在手写数字数据集上获得平均SSIM为0.982（范围0.96\textasciitilde0.995），在服装数据集上获得平均SSIM为0.922（范围0.750\textasciitilde0.984），与原文献报告的实验结论基本吻合，验证了跨平台复现的有效性。由于实现细节差异（编程语言、框架版本等），完全一致的数值对比较为困难，本章更强调验证流程的建立与对照基准的设定。
 
@@ -296,7 +296,7 @@ SSIM的计算公式为：
 
 \section{本章小结}
 
-本章基于\citet{sun2024ol_calibrationfree}公开的数据集建立了散斑图像重建的验证流程，主要完成了以下工作：
+本章基于公开的数据集建立了散斑图像重建的验证流程，主要完成了以下工作：
 
 \begin{enumerate}
     \item \textbf{数据集获取与划分}：基于公开的手写数字数据集（26,001张训练集、3,300张验证集、78张测试集，共29,379张）和服装数据集（18,001张训练集、2,700张验证集、96张测试集，共20,797张），建立了标准化的数据预处理与划分流程。

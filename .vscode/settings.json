@@ -55,7 +55,11 @@
     "*.synctex.gz",
     "*.xdv"
   ],
-  "latex-workshop.latex.clean.subfolder.enabled": true
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+  // Git: 自动刷新文件状态
+  "git.autoRefresh": true,
+  "git.enabled": true,
+  "git.autofetch": true
 }
 
 
