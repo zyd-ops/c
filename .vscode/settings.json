@@ -56,7 +56,7 @@
     "*.xdv"
   ],
   "latex-workshop.latex.clean.subfolder.enabled": true,
-  // Git: 自动刷新文件状态和检测
+  // Git: 自动刷新文件状态和检测（增强版）
   "git.autoRefresh": true,
   "git.enabled": true,
   "git.autofetch": true,
@@ -64,6 +64,8 @@
   "git.refreshOnWindowFocus": true,
   "git.decorations.enabled": true,
   "git.statusLimit": 10000,
+  "git.pollInterval": 1000,
+  "git.path": null,
   // 文件监控设置，确保文件变化能被检测到
   "files.watcherExclude": {
     "**/.git/objects/**": false,
@@ -75,8 +77,12 @@
     "**/*.tex",
     "**/*.bib",
     "**/*.sty",
-    "**/*.cls"
-  ]
+    "**/*.cls",
+    "**/*.md",
+    "**/*.json"
+  ],
+  // 强制启用文件系统监控
+  "files.useExperimentalFileWatcher": true
 }
 
 
