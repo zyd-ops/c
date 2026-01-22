@@ -60,12 +60,12 @@
   "git.autorefresh": true,
   "git.refreshInterval": 1000,
   "git.usePolling": true,
-  // "git.enabled": true,
-  // "git.autofetch": true,
-  // "git.autoRepositoryDetection": true,
-  // "git.refreshOnWindowFocus": true,
-  // "git.decorations.enabled": true,
-  // "git.statusLimit": 10000,
+  "git.enabled": true,
+  "git.autofetch": true,
+  "git.autoRepositoryDetection": true,
+  "git.refreshOnWindowFocus": true,
+  "git.decorations.enabled": true,
+  "git.statusLimit": 10000,
   // 文件监控设置，确保文件变化能被检测到
   "files.watcherExclude": {
     "**/.git/objects/**": true,
