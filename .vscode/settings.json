@@ -57,7 +57,9 @@
   ],
   "latex-workshop.latex.clean.subfolder.enabled": true,
   // Git: 自动刷新文件状态和检测（增强版）
-  "git.autoRefresh": true,
+  "git.autorefresh": true,
+  "git.refreshInterval": 1000,
+  "git.usePolling": true,
   "git.enabled": true,
   "git.autofetch": true,
   "git.autoRepositoryDetection": true,
@@ -68,8 +70,8 @@
   "git.path": null,
   // 文件监控设置，确保文件变化能被检测到
   "files.watcherExclude": {
-    "**/.git/objects/**": false,
-    "**/.git/subtree-cache/**": false,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true,
     "**/Tmp/**": true
   },
