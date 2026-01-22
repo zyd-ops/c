@@ -1,0 +1,61 @@
+{
+  // Cursor/VSCode + LaTeX Workshop: save -> build -> preview pdf
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+  "latex-workshop.latex.outDir": "%DIR%/Tmp",
+  "latex-workshop.latex.rootFile": "Thesis.tex",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-xe",
+      "command": "/Library/TeX/texbin/latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-xelatex",
+        "-bibtex",
+        "-outdir=%OUTDIR%",
+        "-auxdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {
+        "PATH": "/Library/TeX/texbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      }
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (xelatex + bibtex)",
+      "tools": [
+        "latexmk-xe"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "latexmk (xelatex + bibtex)",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.synctex.gz",
+    "*.xdv"
+  ],
+  "latex-workshop.latex.clean.subfolder.enabled": true
+}
+
+

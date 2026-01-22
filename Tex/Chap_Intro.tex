@@ -1,0 +1,151 @@
+% !TEX root = ../Thesis.tex
+
+\chapter{绪论}\label{chap:introduction}
+
+{
+
+\section{研究背景与意义}\label{sec:background}
+
+光学成像技术在生物医学、工业检测、遥感探测等众多领域中发挥着重要作用。随着应用需求的不断提升，人们对成像系统的空间分辨率、穿透深度、柔性化以及微型化等方面提出了更高的要求。传统的刚性内窥镜虽然能够实现高质量成像，但其刚性结构限制了在狭小、弯曲空间中的应用。相比之下，基于光纤的成像技术因其柔性、细小的特点，在微创医学成像、体内诊断等领域展现出巨大的应用潜力。
+
+多模光纤（Multimode Fiber, MMF）作为一种能够支持多个传输模式的光纤，相比传统的光纤束具有更细的直径、更低的成本以及更大的信息传输容量。然而，由于光在多模光纤中传输时会发生模式色散和模式耦合，导致输出端呈现出复杂的散斑图案，无法直接用于成像。如何从这些看似杂乱无章的散斑图中重建出原始图像信息，成为多模光纤成像技术的核心挑战。
+
+传统的多模光纤成像方法主要包括基于波前整形的方法和基于传输矩阵的方法。这些方法虽然能够实现一定程度的图像重建，但存在标定过程复杂、对光纤扰动敏感、计算量大等问题，限制了其在实际应用中的推广。近年来，随着人工智能技术的快速发展，深度学习方法在图像处理、模式识别等领域取得了突破性进展。深度学习强大的非线性映射能力和端到端的学习方式，为解决多模光纤散斑图像重建问题提供了新的思路。
+
+本研究旨在探索基于深度学习的多模光纤散斑图像重建方法，通过构建适合该任务的神经网络模型，实现从散斑图到原始图像的直接映射。相比传统方法，深度学习方法具有以下优势：（1）无需复杂的光学标定过程；（2）具有更强的鲁棒性；（3）推理速度快，有望实现实时成像。本研究不仅有助于推动多模光纤成像技术的发展，也为柔性内窥成像、微创医学诊断等实际应用提供技术支撑。
+
+
+\section{国内外研究现状}\label{sec:relatedwork}
+
+\subsection{多模光纤成像技术的发展}
+
+多模光纤（Multimode Fiber, MMF）因其能够支持数千个空间模式，在保持纤细柔性的同时提供了巨大的信息传输容量，使其成为全息内窥成像的理想探针\citep{conkey2012high,bianchi2012multi,cizmar2012exploiting,papadopoulos2013high}。其小型化和微创性的特点使其在生物组织深部成像中极具吸引力\citep{wen2023single,stiburek2023110,ohayon2018minimally,vasquez2018subcellular,turtaev2018high}。然而，多模光纤中的光传输受到模式耦合、模式干涉以及侧壁反射的复杂影响，导致输出端呈现出复杂的散斑样强度分布，使得直接成像变得困难。
+
+\subsubsection{基于波前整形的方法}
+
+波前整形（Wavefront Shaping）技术是突破多模光纤成像限制的重要方法\citep{vellekoop2007focusing}。该技术通过精确控制光的传播特性来解决这些畸变问题。其中，数字相位共轭\citep{papadopoulos2012focusing,czarske2016transmission}、传输矩阵\citep{cizmar2011shaping,ploschner2015seeing,li2021memory}和迭代方法\citep{wang2025real,zhong2023efficient,yao2025efficient}等方法采用空间光调制器对入射波前进行整形，从而实现对光纤输出端场分布的精确控制，最终能够在复杂的多模传播条件下重建清晰图像。虽然波前整形方法在理论和实验上取得了重要进展，但其需要复杂的迭代优化过程和频繁的光学标定，且对光纤扰动极为敏感，限制了实际应用。
+
+\subsubsection{基于传输矩阵的方法}
+
+传输矩阵（Transmission Matrix, TM）方法通过建立输入光场与输出光场之间的线性关系矩阵，实现图像的传输和重建\citep{cizmar2011shaping,ploschner2015seeing}。该方法理论上能够完全表征多模光纤的传输特性，但传输矩阵的测量过程耗时较长，且矩阵维度巨大，给存储和计算带来了挑战。近年来，研究者提出了无需参考光的传输矩阵获取方法\citep{zhong2023efficient}和基于记忆效应的成像方法\citep{li2021memory}，在一定程度上改善了实用性。然而，传输矩阵对光纤的温度、弯曲等环境因素仍然高度敏感，需要频繁重新标定。
+
+
+\subsection{多模光纤在生物医学成像中的应用}
+
+多模光纤成像技术在生物医学领域展现出巨大的应用前景，特别是在深部脑成像和微创内窥检查方面。Wen等人\citep{wen2023single}利用单根多模光纤实现了体内光场编码的内窥成像，为最小侵入性成像提供了新途径。Stibůrek等人\citep{stiburek2023110}更是开发了仅110微米厚的超细内窥镜，成功应用于深部脑神经连接、活动和血流动力学的体内观测。如图\ref{fig:stiburek2023_imaging}所示，该超细内窥镜系统能够实现深部脑组织的微创成像，为神经科学研究提供了强有力的工具。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Img/1/stiburek2023110-imaging.png}
+    \bicaption{\enspace 110微米超细多模光纤内窥镜系统\citep{stiburek2023110}。(a) 实验装置示意图；(b) 光纤探针与小鼠大脑的尺寸对比；(c) 深部脑神经连接、活动和血流动力学的体内观测示意}
+              {\enspace 110 μm thin endomicroscope system using multimode fiber\citep{stiburek2023110}. (a) Schematic of experimental setup; (b) Scale comparison of fiber probe and mouse brain; (c) In vivo observation of neuronal connectivity, activity and blood flow dynamics in deep brain}
+    \label{fig:stiburek2023_imaging}
+\end{figure}
+
+在深部脑荧光成像方面，Ohayon等人\citep{ohayon2018minimally}开发了微创多模光纤微型内窥镜系统。Vasquez-Lopez等人\citep{vasquez2018subcellular}利用多模光纤实现了亚细胞空间分辨率的深部脑体内成像。Turtaev等人\citep{turtaev2018high}基于多模光纤实现了高保真度的深部脑体内成像，如图\ref{fig:turtaev2018_setup}所示，其成像系统包括标定和成像两个步骤，通过将直径仅50微米的超细光纤探针插入小鼠脑部目标区域，实现了高保真的体内神经成像。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Img/1/turtaev2018-imaging-setup.png}
+    \bicaption{\enspace 高保真多模光纤脑部成像系统\citep{turtaev2018high}。(a) 成像系统示意图，包括标定（步骤1）和成像（步骤2）过程，小鼠头部固定并通过电动平台将光纤降至脑部目标区域；(b) 多模光纤探针的平顶锥形端面结构，纤芯直径50微米，外径60微米}
+              {\enspace High-fidelity multimode fiber imaging system for brain imaging\citep{turtaev2018high}. (a) Schematic of imaging setup with calibration (step 1) and imaging (step 2), showing head-fixed mouse and motorized stage for fiber positioning; (b) Flat-top cone termination of MMF probe with 50 μm core diameter and 60 μm outer diameter}
+    \label{fig:turtaev2018_setup}
+\end{figure}
+
+这些研究充分展示了多模光纤在生物医学微创成像领域的巨大潜力，为临床诊断和神经科学研究提供了强有力的工具。
+
+
+\subsection{深度学习方法在多模光纤成像中的进展}
+
+作为波前整形方法的替代方案，深度学习技术近年来已成为多模光纤图像重建的重要途径\citep{fan2021deep,fan2021learning,fan2019high,liu2023single}。通过直接学习光纤输出端的仅强度散斑图案，深度神经网络，特别是U-Net和卷积神经网络等架构，已实现了精确的图像恢复，甚至能够处理公里级长度光纤的成像\citep{borhani2018learning,rahmani2018multimode,zhu2023anti,liu2022learning,wang2022complex,yang2022single,zhan2024enhanced}。Zhan等人\citep{zhan2024enhanced}进一步提出了基于奇异值分解的模态调制方法，通过选择性激发光纤内部模式来提升成像质量。如图\ref{fig:zhan2024_enhanced}所示，该方法在40微米芯径的多模光纤系统中，针对MNIST、QuickDraw、SIPaKMeD和ImageNet四种不同数据集均实现了显著的重建质量提升，证明了模态调制策略的有效性。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Img/1/zhan2024enhanced-fig5.jpeg}
+    \bicaption{\enspace 基于模态调制的多模光纤图像重建效果对比\citep{zhan2024enhanced}。展示了40微米芯径多模光纤系统中四种数据集（MNIST、QuickDraw、SIPaKMeD、ImageNet）的重建结果，对比了未使用模态调制（Ref）与使用不同奇异向量调制（No. X）的效果，数值为PSNR（dB）和SSIM指标}
+              {\enspace Comparison of image reconstruction quality with and without mode modulation\citep{zhan2024enhanced}. Results for four datasets (MNIST, QuickDraw, SIPaKMeD, ImageNet) in a 40 μm core diameter multimode fiber system, comparing reference (Ref) without mode modulation and reconstructions using different singular vectors (No. X), with PSNR (dB) and SSIM metrics}
+    \label{fig:zhan2024_enhanced}
+\end{figure}
+
+\subsubsection{深度学习方法的优势}
+
+深度神经网络展现出显著的鲁棒性，能够有效补偿动态光纤变形和环境扰动，无需频繁重新标定\citep{abdulaziz2023robust}。Caramazza等人\citep{caramazza2019transmission}展示了通过动态弯曲光纤实现实时成像的能力，以视频帧率传输和重建复杂的自然场景全彩图像。Tu等人\citep{tu2025deep}开发了用于多模光纤光学相位恢复的深度经验神经网络，无需大量标记数据集即可实现精确的图像重建，相比传统监督学习方法显著提高了恢复信息的保真度。
+
+\subsubsection{创新架构与编码方法}
+
+Yu等人\citep{yu2025all}提出的混合实现方案将衍射神经网络直接集成在光纤端面上，实现了全光学重建，为紧凑型超快光子成像系统开辟了新途径。如图\ref{fig:yu2025_all}所示，该方案通过在多模光纤远端集成微型衍射神经网络（DN2s），能够直接重建传播光学图像的畸变波前（振幅和相位），实现全光学图像传输，无需电子计算过程。这种全光学重建方法为紧凑型超快光子成像系统提供了新的技术路径。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Img/1/yu2025all-fig1.png}
+    \bicaption{\enspace 光纤集成微型衍射神经网络实现全光学图像传输\citep{yu2025all}。光学图像入射到多模光纤近端，在远端产生散斑图案。通过在远端集成微型衍射神经网络（DN2s），可以重建传播光学图像的畸变波前（振幅和相位），实现全光学图像传输。图中展示了手写数字3的光学图像通过多模光纤传输和全光学重建的完整过程}
+              {\enspace Fiber-integrated miniaturized diffractive neural networks (DN2s) for all-optical image transportation through multimode fiber\citep{yu2025all}. An optical image incident on the proximal facet generates a speckle pattern at the distal facet. By integrating miniaturized DN2s on the distal facet, the distorted wavefront (amplitude and phase) of the propagating optical image can be reconstructed, enabling all-optical image transportation. The figure illustrates the complete process of optical image transmission and reconstruction for a handwritten digit 3}
+    \label{fig:yu2025_all}
+\end{figure}
+
+最近，创新的编码方案如全息标记\citep{collard2024exploiting}增强了散斑图案的可变性，促进了多路复用数据重建和分类，无需时间同步。Collard等人\citep{collard2024exploiting}提出的全息编码方法通过在全息图中添加闪耀光栅（blazed grating），将图像数据偏移到光纤纤芯周围，从而在输出散斑中编码更高水平的方差，提高了多模光纤与深度神经网络组合系统的整体传输能力。如图\ref{fig:collard2024_exploiting}所示，该方法的全息编码原理（图a）通过在原始图像数据上叠加闪耀光栅，使得光场在空间上发生偏移，这种空间偏移在光纤传输过程中被编码到散斑图案中，从而增强了散斑的可区分性。实验采用空间光调制器（SLM）生成全息图案，通过透镜和物镜系统将编码后的光场耦合进入多模光纤（图b）。在光纤输出端，使用电荷耦合器件（CCD）采集散斑图案，然后通过ResUNet卷积神经网络进行图像重建（图c）。该方法的关键创新在于通过全息标签实现了散斑图案的聚类，使得不同标签对应的散斑图案可以被明确区分，从而支持多路复用传输和分类，无需发送端和接收端之间的时间同步。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Img/1/collard2024exploiting-fig1.png}
+    \bicaption{\enspace 全息编码多模光纤图像传输原理\citep{collard2024exploiting}。(a) 全息编码原理；(b) 光学实验装置；(c) ResUNet网络结构}
+              {\enspace Principle of holographic encoding for multimode fiber image transmission\citep{collard2024exploiting}. (a) Holographic encoding principle; (b) Optical experimental setup; (c) ResUNet network structure}
+    \label{fig:collard2024_exploiting}
+\end{figure}
+
+\subsubsection{U-Net架构在光纤成像中的应用}
+
+U-Net网络\citep{ronneberger2015unet}最初为生物医学图像分割设计，其编码器-解码器结构和跳跃连接机制使其在图像重建任务中表现出色。编码器部分能够提取图像的多尺度特征，解码器部分则逐步恢复图像的空间细节，跳跃连接则保留了浅层的高分辨率信息。这种架构特别适合处理散斑到图像的重建任务，已被广泛应用于多模光纤成像研究中\citep{borhani2018learning,rahmani2018multimode}。
+
+
+\subsection{现有研究的不足与挑战}
+
+尽管深度学习在多模光纤散斑成像中展现出了巨大潜力，但现有研究仍面临以下挑战：
+
+\begin{enumerate}
+    \item \textbf{信息传输容量的充分利用}：多模光纤支持数千个空间模式，具有巨大的信息传输容量。然而，现有研究大多将同质化程度较高的单一图像数据集直接投射到空间光调制器后耦合进光纤，未能充分利用光纤的多模态传输能力。如何通过编码技术（如全息编码、偏振编码等）进一步提升信息复用度和传输效率，是一个值得探索的方向。
+    
+    \item \textbf{多模态编码的系统化研究}：虽然已有研究探索了全息编码\citep{collard2024exploiting}和偏振编码\citep{fan2021learning}等单一编码方式，但对于多种编码方式的协同作用、最优编码策略以及编码参数对重建质量的影响机制，仍缺乏系统化的研究。
+    
+    \item \textbf{网络架构的专门优化}：现有研究多采用通用的网络架构（如标准U-Net、ResNet等），针对多模光纤散斑图像的特殊性质（如远场角度相关性、偏振态保持等）的专门优化较少。设计适合光纤散斑重建任务的网络架构具有重要研究价值。
+    
+    \item \textbf{从实验室到应用的转化}：现有研究多在厘米级短光纤和实验室稳定环境下开展，向米级、公里级光纤以及实际临床或通信场景的转化仍面临光源相干性、系统小型化、实时性等多方面挑战。
+    
+    \item \textbf{对光纤动态扰动的适应性}：虽然深度学习方法相比传统方法具有更好的鲁棒性，但在实际应用中，光纤不可避免地会受到弯曲、扭转、温度变化等动态因素的影响。在实验室稳定条件下训练的模型，在生物医学内窥镜等动态应用场景中可能需要频繁重新标定或自适应训练。
+\end{enumerate}
+
+
+\section{本文主要研究内容}\label{sec:contribution}
+
+针对上述挑战，本文开展了基于全息与偏振双重编码的多模光纤散斑图像重建方法研究。主要研究内容包括：
+
+\begin{enumerate}
+    \item \textbf{基于公开数据集的初步验证研究}：利用公开的多芯光纤散斑数据集\citep{sun2024ol_calibrationfree,sun2023_figshare_dataset1,sun2023_figshare_dataset2}，复现和验证了深度学习方法在散斑图像重建中的可行性。通过系统分析网络架构、损失函数、训练参数等关键因素对重建性能的影响，建立了散斑图像重建的基本流程和性能评价标准，为后续自建系统的研究奠定了基础。
+    
+    \item \textbf{全息与偏振双重编码方案设计}：针对多模光纤信息传输容量利用不足的问题，提出了结合全息编码与偏振编码的双重编码方案。利用数字微镜器件（DMD）实现全息图案的生成和偏振态的调控，将图像编码到不同的空间角度和偏振通道中，显著增强了散斑图案的可区分性和信息复用度。
+    
+    \item \textbf{改进的DeepLeakyU-Net网络设计}：针对多模光纤散斑图像重建的特点，设计了改进的U-Net架构（DeepLeakyU-Net）。通过增加网络深度、引入LeakyReLU激活函数、优化跳跃连接等策略，提高了网络对复杂散斑特征的提取能力和重建图像的保真度。
+    
+    \item \textbf{多模光纤成像实验系统搭建}：设计并搭建了完整的多模光纤成像实验系统，包括激光光源、DMD调制系统、偏振控制光路、多模光纤耦合系统以及远场成像采集系统。建立了高质量的全息与偏振编码散斑-图像配对数据集，包含70,000组训练数据和详细的编码参数记录。
+    
+    \item \textbf{编码可区分性与重建性能分析}：采用无监督降维方法（UMAP、t-SNE）对不同全息标签和偏振态的散斑图案进行聚类分析，定量评估编码方案的可区分性。通过结构相似度（SSIM）、相关矩阵等指标全面评估重建性能，验证了双重编码方案的有效性。实验结果表明，所提方法在三种偏振态下均实现了平均SSIM约0.93的高质量重建。
+    
+    \item \textbf{编码容量与系统可扩展性研究}：通过对25个全息标签和多种偏振态组合的系统研究，分析了编码容量与重建质量的关系，探讨了系统向更高复用度扩展的潜力和面临的挑战，为未来的多模光纤高通量成像系统设计提供了参考。
+\end{enumerate}
+
+
+\section{论文组织结构}\label{sec:organization}
+
+本文共分为五章，各章内容安排如下：
+
+\textbf{第一章}为绪论，介绍了研究背景与意义，系统综述了多模光纤成像技术的发展历程、在生物医学成像中的应用以及深度学习方法在多模光纤成像中的研究进展，分析了现有研究面临的挑战，阐述了本文的主要研究内容和论文组织结构。
+
+\textbf{第二章}介绍理论基础，详细阐述了多模光纤的基本结构、模式传播特性、散斑的形成机制以及传统多模光纤成像方法的原理；然后系统介绍了深度学习的基础知识，重点讨论了卷积神经网络、U-Net网络架构、损失函数与训练策略；最后综述了深度学习在光学成像领域的应用，为后续研究提供理论支撑。
+
+\textbf{第三章}介绍基于公开多芯光纤散斑数据集的神经网络成像实验，包括数据集介绍、网络模型设计、训练过程以及实验结果分析。通过对公开数据集的验证性研究，建立了散斑图像重建的基本流程和评价标准，为后续的自建实验系统与方法创新奠定基础。
+
+\textbf{第四章}详细介绍本文提出的基于全息与偏振双重编码的多模光纤图像传输方法，这是本文的核心内容。包括光学编码原理、实验系统搭建、改进的DeepLeakyU-Net网络架构设计、数据集构建、训练优化策略，以及详细的实验结果与性能分析。通过双重编码方案显著提升了多模光纤的信息传输容量和重建保真度。
+
+\textbf{第五章}对全文进行总结，归纳本文的主要工作和创新点，并对未来的研究方向进行展望。
+
+}

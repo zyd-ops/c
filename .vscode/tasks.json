@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Thesis: 编译（XeLaTeX + BibTeX，不打开PDF）",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/artratex.sh",
+        "xa",
+        "Thesis.tex"
+      ],
+      "options": {
+        "env": {
+          "ARTRATEX_NO_VIEW": "1"
+        }
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Thesis: 编译（XeLaTeX + BibTeX，打开PDF）",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/artratex.sh",
+        "xa",
+        "Thesis.tex"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Thesis: 清理（删除 Tmp/）",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "rm -rf Tmp"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
+
+

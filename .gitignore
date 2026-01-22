@@ -1,0 +1,21 @@
+.DS_Store
+/Img/*
+/Tmp/*
+/ref/*
+*.log
+*.out
+*.pdf
+
+# LaTeX 辅助文件
+*.aux
+*.lof
+*.lot
+*.toc
+*.loappfig
+*.loapptab
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv

@@ -1,0 +1,58 @@
+% !TEX root = ../Thesis.tex
+
+%---------------------------------------------------------------------------%
+%->> Frontmatter
+%---------------------------------------------------------------------------%
+%-
+%-> 生成封面
+%-
+
+\maketitle% 生成中文封面
+\MAKETITLE% 生成英文封面
+%-
+%-> 作者声明
+%-
+\makedeclaration% 生成声明页
+%-
+%-> 中文摘要
+%-
+\intobmk\chapter*{摘\quad 要}% 显示在书签但不显示在目录
+\setcounter{page}{1}% 开始页码
+\pagenumbering{Roman}% 页码符号
+
+多模光纤因其能够支持数千个空间模式,在紧凑且微创的形态下实现高分辨率成像,成为生物医学内窥成像和光学通信领域的理想探针。然而,光在多模光纤中传输时,模间耦合、模式干涉以及侧壁反射会导致复杂的散斑图案,严重限制了图像传输的保真度。近年来,深度学习技术为多模光纤成像提供了新的解决方案,通过端到端的监督学习建立散斑图案与目标图像之间的映射关系,实现了高质量的图像重建。然而,如何进一步提升多模光纤的信息容量和重建保真度,充分利用光纤支持的数千个模式,仍是亟待解决的关键问题。
+
+本文系统研究了基于深度学习的多模光纤散斑图像重建方法,重点探索了如何通过多维度编码策略提升信息传输容量。首先,基于公开的多芯光纤散斑数据集,验证了U-Net神经网络在散斑图像重建任务中的有效性,针对手写数字数据集和服装数据集分别实现了平均结构相似度(SSIM)为0.982和0.922的重建效果,为后续研究奠定了方法基础。
+
+在此基础上,本文提出了一种双编码方案,同时利用全息编码和偏振编码来显著增强多模光纤的信息承载能力。该方案采用数字微镜器件(DMD)加载计算生成的二值振幅全息图,通过离轴全息配置精确控制+1级衍射光的波前。设计了$5\times5$网格排列的25个全息标签,每个标签对应不同的入射角度,激发不同的模式组合;同时利用偏振分束器和四分之一波片实现s偏振、p偏振和混合偏振三种偏振态的编码,理论上可实现$25 \times 3 = 75$路复用传输。所有编码信息在计算全息图生成时预先确定,光学系统保持固定配置,确保了系统的稳定性和数据采集的高效性。
+
+针对双编码散斑图像的重建任务,本文提出了改进的DeepLeakyU-Net(DLU-Net)网络架构。该网络在编码器路径采用Leaky ReLU激活函数以改善梯度流动,使用步长卷积替代池化层以更好地保留空间信息,并增加了网络深度和基础特征数。实验结果表明,在三种偏振态下均实现了高保真度重建,平均SSIM达到0.93,证明了方法的偏振不变性和鲁棒性。此外,利用UMAP和t-SNE等无监督降维方法对散斑图案进行聚类分析,结果显示不同偏振态和全息标签下的散斑图在特征空间中形成清晰可分的聚类簇,验证了双编码方案的有效性和可区分性。
+
+本文的主要创新点包括:(1)首次将全息编码与偏振编码相结合,提出双编码方案,显著提升多模光纤的信息传输容量;(2)提出改进的DeepLeakyU-Net网络架构,提升了散斑图像的重建性能;(3)采用远场成像机制,利用阶跃型多模光纤的角度相关性实现基于角域信息的图像重建;(4)通过无监督聚类分析验证了编码方案的鲁棒性和可区分性。
+
+本研究为多模光纤成像系统的性能提升提供了新的技术路径,在生物医学内窥成像、光通信等领域具有重要的应用前景。未来工作可进一步优化编码参数,探索更高复用密度,并将方法应用于动态环境下的实时成像场景。
+
+\keywords{多模光纤,全息编码,偏振编码,深度神经网络,图像重建}% 中文关键词
+%-
+%-> 英文摘要
+%-
+\intobmk\chapter*{Abstract}% 显示在书签但不显示在目录
+
+Multimode fibers (MMFs) have emerged as ideal probes for biomedical endoscopic imaging and optical communications due to their capability to support thousands of spatial modes while maintaining a compact and minimally invasive form factor for high-resolution imaging. However, optical transmission through MMFs is complicated by intermodal coupling, modal interference, and sidewall reflections, which collectively generate complex speckle patterns and severely restrict image transmission fidelity. In recent years, deep learning techniques have provided novel solutions for MMF imaging by establishing end-to-end mappings between speckle patterns and target images through supervised learning, achieving high-quality image reconstruction. Nevertheless, how to further enhance the information capacity and reconstruction fidelity of MMFs while fully exploiting the thousands of modes supported by the fiber remains a critical challenge.
+
+This dissertation systematically investigates deep learning-based speckle image reconstruction methods for multimode fibers, with a focus on enhancing information transmission capacity through multi-dimensional encoding strategies. First, based on publicly available multi-core fiber speckle datasets, the effectiveness of U-Net neural networks for speckle image reconstruction tasks was validated, achieving average structural similarity indices (SSIM) of 0.982 and 0.922 for handwritten digit and fashion datasets respectively, establishing a methodological foundation for subsequent research.
+
+Building upon this foundation, a dual-encoding scheme was proposed that simultaneously exploits holographic and polarization encoding to significantly enhance the information-carrying capacity of MMFs. The scheme employs a digital micromirror device (DMD) to display computationally generated binary amplitude holograms, precisely controlling the wavefront of the +1 diffraction order through an off-axis holographic configuration. Twenty-five holographic labels arranged in a $5\times5$ grid were designed, with each label corresponding to a different incident angle that excites distinct modal combinations. Simultaneously, a beam displacer and quarter-wave plate were utilized to encode three polarization states: s-polarization, p-polarization, and combined s- and p-polarizations, theoretically enabling $25 \times 3 = 75$ multiplexed transmission channels. All encoding information is predetermined during hologram generation while the optical system maintains a fixed configuration, ensuring system stability and efficient data acquisition.
+
+For the reconstruction of dual-encoded speckle images, an improved DeepLeakyU-Net (DLU-Net) architecture was proposed. The network adopts Leaky ReLU activation functions in the encoder path to improve gradient flow, uses strided convolutions instead of pooling layers to better preserve spatial information, and increases network depth and base feature numbers. Experimental results demonstrate high-fidelity reconstruction across all three polarization states with an average SSIM of 0.93, confirming the polarization invariance and robustness of the method. Furthermore, unsupervised dimensionality reduction methods such as UMAP and t-SNE were employed for clustering analysis of speckle patterns, revealing that speckles under different polarization states and holographic labels form clearly separable clusters in feature space, validating the effectiveness and discriminability of the dual-encoding scheme.
+
+The main innovations of this work include: (1) the first combination of holographic and polarization encoding through a dual-encoding scheme, significantly enhancing the information transmission capacity of MMFs; (2) the proposal of an improved DeepLeakyU-Net architecture that enhances speckle image reconstruction performance; (3) the adoption of a far-field imaging mechanism that exploits angular correlations in step-index MMFs to achieve angular-domain-based image reconstruction; (4) validation of the robustness and discriminability of the encoding scheme through unsupervised clustering analysis.
+
+This research provides a novel technical approach for enhancing the performance of multimode fiber imaging systems, with significant application prospects in biomedical endoscopic imaging, optical communications, and related fields. Future work may further optimize encoding parameters, explore higher multiplexing densities, and apply the methods to real-time imaging scenarios under dynamic conditions.
+
+\KEYWORDS{Multimode fiber, Holographic encoding, Polarization encoding, Deep neural network, Image reconstruction}% 英文关键词
+
+\pagestyle{enfrontmatterstyle}%
+\cleardoublepage\pagestyle{frontmatterstyle}%
+
+%---------------------------------------------------------------------------%

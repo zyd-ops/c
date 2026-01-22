@@ -1,0 +1,709 @@
+%---------------------------------------------------------------------------%
+%-                                                                         -%
+%-                             Bibliography                                -%
+%-                                                                         -%
+%---------------------------------------------------------------------------%
+%---------------------------------------------------------------------------%
+%->> Multimode / multi-core fiber imaging & deep learning (thesis content)
+%---------------------------------------------------------------------------%
+
+@article{Collard:24,
+    author = {Liam Collard and Mohammadrahim Kazemzadeh and Linda Piscopo and Massimo De Vittorio and Ferruccio Pisanello},
+    journal = {Opt. Express},
+    keywords = {Deep learning; Fourier transforms; Modulation techniques; Multimode fibers; Spatial light modulators; Speckle patterns},
+    number = {11},
+    pages = {18896--18908},
+    publisher = {Optica Publishing Group},
+    title = {Exploiting holographically encoded variance to transmit labelled images through a multimode optical fiber},
+    volume = {32},
+    month = {May},
+    year = {2024},
+    abstract = {Artificial intelligence has emerged as promising tool to decode an image transmitted through a multimode fiber (MMF) by applying deep learning techniques. By transmitting thousands of images through the MMF, deep neural networks (DNNs) are able to decipher the seemingly random output speckle patterns and unveil the intrinsic input-output relationship. High fidelity reconstruction is obtained for datasets with a large degree of homogeneity, which underutilizes the capacity of the combined MMF-DNN system. Here, we show that holographic modulation can encode an additional layer of variance on the output speckle pattern, improving the overall transmissive capabilities of the system. Operatively, we have implemented this by adding a holographic label to the original dataset and injecting the resulting phase image into the fiber facet through a Fourier transform lens. The resulting speckle pattern dataset can be clustered primarily by holographic label, and can be reconstructed without loss of fidelity. As an application, we describe how color images may be segmented into RGB components and each color component may then be labelled by distinct hologram. A ResUNet architecture was then used to decode each class of speckle patterns and reconstruct the color image without the need for temporal synchronization between sender and receiver.}
+}
+
+@article{sun2024ol_calibrationfree,
+    author  = {Sun, Jiawei and Zhao, Bin and Wang, Dong and Wang, Zhigang and Zhang, Jie and Koukourakis, Nektarios and Czarske, Juergen W. and Li, Xuelong},
+    title   = {Calibration-free quantitative phase imaging in multi-core fiber endoscopes using end-to-end deep learning},
+    journal = {Optics Letters},
+    year    = {2024},
+    volume  = {49},
+    number  = {2},
+    pages   = {342--345}
+}
+
+@misc{sun2023_figshare_dataset1,
+    author       = {Sun, Jiawei},
+    title        = {Training dataset 1 for reconstruct the phase image through a multi-core fiber bundle},
+    howpublished = {figshare},
+    year         = {2023}
+}
+
+@misc{sun2023_figshare_dataset2,
+    author       = {Sun, Jiawei},
+    title        = {Training dataset 2 for reconstruct the phase image through a multi-core fiber bundle},
+    howpublished = {figshare},
+    year         = {2023}
+}
+
+@article{sun2024dl_fiber_imaging,
+    title   = {深度学习在光纤成像中的应用进展（特邀）},
+    author  = {孙佳伟 and 陈照青 and 赵斌 and 李学龙},
+    key     = {Sun Jia Wei},
+    journal = {Laser \& Optoelectronics Progress},
+    volume  = {61},
+    number  = {16},
+    pages   = {1611004},
+    year    = {2024},
+    publisher = {中国激光杂志社}
+}
+
+
+@article{popoff2010measuring,
+  title={Measuring the transmission matrix in optics: an approach to the study and control of light propagation in disordered media},
+  author={Popoff, S{\'e}bastien M and Lerosey, Geoffroy and Carminati, R{\'e}mi and Fink, Mathias and Boccara, A Claude and Gigan, Sylvain},
+  journal={Physical Review Letters},
+  volume={104},
+  number={10},
+  pages={100601},
+  year={2010},
+  publisher={APS}
+}
+@article{choi2012transmission,
+  title = {Transmission eigenchannels in a disordered medium},
+  author = {Choi, Wonjun and Mosk, Allard P. and Park, Q-Han and Choi, Wonshik},
+  journal = {Phys. Rev. B},
+  volume = {83},
+  issue = {13},
+  pages = {134207},
+  numpages = {6},
+  year = {2011},
+  month = {Apr},
+  publisher = {American Physical Society}
+}
+@article{leith1962reconstructed,
+  title={Reconstructed wavefronts and communication theory},
+  author={Leith, Emmett N and Upatnieks, Juris},
+  journal={Journal of the Optical Society of America},
+  volume={52},
+  number={10},
+  pages={1123--1130},
+  year={1962},
+  publisher={Optical Society of America}
+}
+@article{leith1964wavefront,
+  title={Wavefront reconstruction with diffused illumination and three-dimensional objects},
+  author={Leith, Emmett N and Upatnieks, Juris},
+  journal={Journal of the Optical Society of America},
+  volume={54},
+  number={11},
+  pages={1295--1301},
+  year={1964},
+  publisher={Optical Society of America}
+}
+@article{lohmann1967binary,
+  title={Binary Fraunhofer holograms, generated by computer},
+  author={Lohmann, Adolf W and Paris, David P},
+  journal={Applied Optics},
+  volume={6},
+  number={10},
+  pages={1739--1748},
+  year={1967},
+  publisher={Optical Society of America}
+}
+%---------------------------------------------------------------------------%
+%->> Deep learning methods and optimizers
+%---------------------------------------------------------------------------%
+
+@article{kingma2014adam,
+    author  = {Kingma, Diederik P. and Ba, Jimmy},
+    title   = {Adam: A method for stochastic optimization},
+    journal = {arXiv preprint arXiv:1412.6980},
+    year    = {2014},
+    volume  = {1412},
+    number  = {6980}
+}
+
+@ARTICLE{lecun1998gradient,
+  author={Lecun, Y. and Bottou, L. and Bengio, Y. and Haffner, P.},
+  journal={Proceedings of the IEEE}, 
+  title={Gradient-based learning applied to document recognition}, 
+  year={1998},
+  volume={86},
+  number={11},
+  pages={2278-2324},
+  keywords={Neural networks;Pattern recognition;Machine learning;Optical character recognition software;Character recognition;Feature extraction;Multi-layer neural network;Optical computing;Hidden Markov models;Principal component analysis}
+}
+
+@article{krizhevsky2012imagenet,
+  title={Imagenet classification with deep convolutional neural networks},
+  author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  journal={Advances in neural information processing systems},
+  volume={25},
+  year={2012}
+}
+@article{lecun2015deep,
+  title={Deep learning},
+  author={LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
+  journal={Nature},
+  volume={521},
+  number={7553},
+  pages={436--444},
+  year={2015},
+  publisher={Nature Publishing Group}
+}
+@inproceedings{ioffe2015batch,
+  title={Batch normalization: Accelerating deep network training by reducing internal covariate shift},
+  author={Ioffe, Sergey and Szegedy, Christian},
+  booktitle={International Conference on Machine Learning (ICML)},
+  pages={448--456},
+  year={2015},
+  organization={PMLR}
+}
+# 损失函数、训练策略
+@article{robbins1951stochastic,
+    author  = {Robbins, Herbert and Monro, Sutton},
+    title   = {A stochastic approximation method},
+    journal = {The Annals of Mathematical Statistics},
+    volume  = {22},
+    number  = {3},
+    pages   = {400--407},
+    year    = {1951},
+    publisher = {Institute of Mathematical Statistics}
+}
+
+@article{ruder2016overview,
+    author  = {Ruder, Sebastian},
+    title   = {An overview of gradient descent optimization algorithms},
+    journal = {arXiv preprint arXiv:1609.04747},
+    year    = {2016}
+}
+
+@article{polyak1964momentum,
+    author  = {Polyak, Boris T},
+    title   = {Some methods of speeding up the convergence of iteration methods},
+    journal = {USSR Computational Mathematics and Mathematical Physics},
+    volume  = {4},
+    number  = {5},
+    pages   = {1--17},
+    year    = {1964},
+    publisher = {Elsevier}
+}
+
+@inproceedings{loshchilov2019adamw,
+  title={Decoupled Weight Decay Regularization},
+  author={Ilya Loshchilov and Frank Hutter},
+  booktitle={International Conference on Learning Representations},
+  year={2017}
+}
+
+@article{srivastava2014dropout,
+    author  = {Srivastava, Nitish and Hinton, Geoffrey and Krizhevsky, Alex and Sutskever, Ilya and Salakhutdinov, Ruslan},
+    title   = {Dropout: a simple way to prevent neural networks from overfitting},
+    journal = {The Journal of Machine Learning Research},
+    volume  = {15},
+    number  = {1},
+    pages   = {1929--1958},
+    year    = {2014},
+    publisher = {JMLR.org}
+}
+
+@article{shorten2019survey,
+    author  = {Shorten, Connor and Khoshgoftaar, Taghi M},
+    title   = {A survey on image data augmentation for deep learning},
+    journal = {Journal of Big Data},
+    volume  = {6},
+    number  = {1},
+    pages   = {1--48},
+    year    = {2019},
+    publisher = {SpringerOpen}
+}
+
+@inproceedings{loshchilov2017sgdr,
+    author    = {Loshchilov, Ilya and Hutter, Frank},
+    title     = {SGDR: Stochastic gradient descent with warm restarts},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year      = {2017}
+}
+
+# UNet变体
+@article{zhang2018road,
+    author  = {Zhang, Zhengxin and Liu, Qingjie and Wang, Yunhong},
+    title   = {Road extraction by deep residual u-net},
+    journal = {IEEE Geoscience and Remote Sensing Letters},
+    year    = {2018},
+    volume  = {15},
+    number  = {5},
+    pages   = {749--753}
+}
+
+@article{oktay2018attention,
+    author  = {Oktay, Ozan and Schlemper, Jo and Folgoc, Loic Le and Lee, Matthew and Heinrich, Mattias and Misawa, Kazunari and Mori, Kensaku and McDonagh, Steven and Hammerla, Nils Y and Kainz, Bernhard and others},
+    title   = {Attention u-net: Learning where to look for the pancreas},
+    journal = {arXiv preprint arXiv:1804.03999},
+    year    = {2018}
+}
+
+@article{li2018h,
+    author  = {Li, Xiaomeng and Chen, Hao and Qi, Xiaojuan and Dou, Qi and Fu, Chi-Wing and Heng, Pheng-Ann},
+    title   = {H-DenseUNet: hybrid densely connected UNet for liver and tumor segmentation from CT volumes},
+    journal = {IEEE Transactions on Medical Imaging},
+    year    = {2018},
+    volume  = {37},
+    number  = {12},
+    pages   = {2663--2674}
+}
+
+@inproceedings{cicek20163d,
+  title={3D U-Net: learning dense volumetric segmentation from sparse annotation},
+  author={{\c{C}}i{\c{c}}ek, {\"O}zg{\"u}n and Abdulkadir, Ahmed and Lienkamp, Soeren S and Brox, Thomas and Ronneberger, Olaf},
+  booktitle={International conference on medical image computing and computer-assisted intervention},
+  pages={424--432},
+  year={2016},
+  organization={Springer}
+}
+
+@inproceedings{zhou2018unet++,
+    author    = {Zhou, Zongwei and Rahman Siddiquee, Md Mahfuzur and Tajbakhsh, Nima and Liang, Jianming},
+    title     = {UNet++: A nested U-Net architecture for medical image segmentation},
+    booktitle = {Deep Learning in Medical Image Analysis and Multimodal Learning for Clinical Decision Support},
+    year      = {2018},
+    pages     = {3--11},
+    publisher = {Springer}
+}
+
+# 深度学习在光学成像中的应用
+@article{rivenson2018phase,
+    author  = {Rivenson, Yair and Zhang, Yibo and Günaydın, Hatice and Teng, Da and Ozcan, Aydogan},
+    title   = {Phase recovery and holographic image reconstruction using deep learning in neural networks},
+    journal = {Light: Science \& Applications},
+    volume  = {7},
+    number  = {2},
+    pages   = {17141},
+    year    = {2018},
+    publisher = {Nature Publishing Group}
+}
+
+@article{sinha2017lensless,
+    author  = {Sinha, Ayan and Lee, Justin and Li, Shuai and Barbastathis, George},
+    title   = {Lensless computational imaging through deep learning},
+    journal = {Optica},
+    volume  = {4},
+    number  = {9},
+    pages   = {1117--1125},
+    year    = {2017},
+    publisher = {Optical Society of America}
+}
+
+@article{dong2015image,
+    author  = {Dong, Chao and Loy, Chen Change and He, Kaiming and Tang, Xiaoou},
+    title   = {Image super-resolution using deep convolutional networks},
+    journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+    volume  = {38},
+    number  = {2},
+    pages   = {295--307},
+    year    = {2015},
+    publisher = {IEEE}
+}
+
+@article{zhang2017beyond,
+    author  = {Zhang, Kai and Zuo, Wangmeng and Chen, Yunjin and Meng, Deyu and Zhang, Lei},
+    title   = {Beyond a Gaussian denoiser: Residual learning of deep CNN for image denoising},
+    journal = {IEEE Transactions on Image Processing},
+    volume  = {26},
+    number  = {7},
+    pages   = {3142--3155},
+    year    = {2017},
+    publisher = {IEEE}
+}
+
+@article{li2018imaging,
+    author  = {Li, Shuai and Deng, Mikael and Lee, Justin and Sinha, Ayan and Barbastathis, George},
+    title   = {Imaging through glass diffusers using densely connected convolutional networks},
+    journal = {Optica},
+    volume  = {5},
+    number  = {7},
+    pages   = {803--813},
+    year    = {2018},
+    publisher = {Optical Society of America}
+}
+
+@article{nehme2018deep,
+    author  = {Nehme, Elias and Weiss, Lucien E and Michaeli, Tomer and Shechtman, Yoav},
+    title   = {Deep-STORM: super-resolution single-molecule microscopy by deep learning},
+    journal = {Optica},
+    volume  = {5},
+    number  = {4},
+    pages   = {458--464},
+    year    = {2018},
+    publisher = {Optical Society of America}
+}
+
+@article{wang2019deep,
+    author  = {Wang, Haowen and Rivenson, Yair and Jin, Yiyin and Wei, Zhensong and Gao, Ronald and Günaydın, Hatice and Bentolila, Laurent A and Kural, Comert and Ozcan, Aydogan},
+    title   = {Deep learning enables cross-modality super-resolution in fluorescence microscopy},
+    journal = {Nature Methods},
+    volume  = {16},
+    number  = {1},
+    pages   = {103--110},
+    year    = {2019},
+    publisher = {Nature Publishing Group}
+}
+
+%---------------------------------------------------------------------------%
+%->> 小论文中的全部引用
+%---------------------------------------------------------------------------%
+
+@article{conkey2012high,
+    author  = {Conkey, D. B. and Caravaca-Aguirre, A. M. and Piestun, R.},
+    title   = {High-speed scattering medium characterization with application to focusing light through turbid media},
+    journal = {Optics Express},
+    year    = {2012},
+    volume  = {20},
+    number  = {2},
+    pages   = {1733--1740}
+}
+
+@article{bianchi2012multi,
+    author  = {Bianchi, S. and Di Leonardo, R.},
+    title   = {A multi-mode fiber probe for holographic micromanipulation and microscopy},
+    journal = {Lab on a Chip},
+    year    = {2012},
+    volume  = {12},
+    number  = {3},
+    pages   = {635--639}
+}
+
+@article{cizmar2012exploiting,
+    author  = {Čižmár, T. and Dholakia, K.},
+    title   = {Exploiting multimode waveguides for pure fibre-based imaging},
+    journal = {Nature Communications},
+    year    = {2012},
+    volume  = {3},
+    number  = {1},
+    pages   = {1027}
+}
+
+@article{papadopoulos2013high,
+    author  = {Papadopoulos, I. N. and Farahi, S. and Moser, C. and Psaltis, D.},
+    title   = {High-resolution, lensless endoscope based on digital scanning through a multimode optical fiber},
+    journal = {Biomedical Optics Express},
+    year    = {2013},
+    volume  = {4},
+    number  = {2},
+    pages   = {260--270}
+}
+
+@article{wen2023single,
+    author  = {Wen, Z. and Dong, Z. and Deng, Q. and Pang, C. and Kaminski, C. F. and Xu, X. and Yan, H. and Wang, L. and Liu, S. and Tang, J.},
+    title   = {Single multimode fibre for in vivo light-field-encoded endoscopic imaging},
+    journal = {Nature Photonics},
+    year    = {2023},
+    volume  = {17},
+    number  = {8},
+    pages   = {679--687}
+}
+
+@article{stiburek2023110,
+    author  = {Stibůrek, M. and Ondráčková, P. and Tučková, T. and Turtaev, S. and Šiler, M. and Pikálek, T. and Jákl, P. and Gomes, A. and Krejčí, J. and Kolbábková, P.},
+    title   = {110 μm thin endomicroscope for deep-brain in vivo observations of neuronal connectivity, activity and blood flow dynamics},
+    journal = {Nature Communications},
+    year    = {2023},
+    volume  = {14},
+    number  = {1},
+    pages   = {1897}
+}
+
+@article{ohayon2018minimally,
+    author  = {Ohayon, S. and Caravaca-Aguirre, A. and Piestun, R. and DiCarlo, J. J.},
+    title   = {Minimally invasive multimode optical fiber microendoscope for deep brain fluorescence imaging},
+    journal = {Biomedical Optics Express},
+    year    = {2018},
+    volume  = {9},
+    number  = {4},
+    pages   = {1492--1509}
+}
+
+@article{vasquez2018subcellular,
+    author  = {Vasquez-Lopez, S. A. and Turcotte, R. and Koren, V. and Plöschner, M. and Padamsey, Z. and Booth, M. J. and Čižmár, T. and Emptage, N. J.},
+    title   = {Subcellular spatial resolution achieved for deep-brain imaging in vivo using a minimally invasive multimode fiber},
+    journal = {Light: Science \& Applications},
+    year    = {2018},
+    volume  = {7},
+    number  = {1},
+    pages   = {110}
+}
+
+@article{turtaev2018high,
+    author  = {Turtaev, S. and Leite, I. T. and Altwegg-Boussac, T. and Pakan, J. M. and Rochefort, N. L. and Čižmár, T.},
+    title   = {High-fidelity multimode fibre-based endoscopy for deep brain in vivo imaging},
+    journal = {Light: Science \& Applications},
+    year    = {2018},
+    volume  = {7},
+    number  = {1},
+    pages   = {92}
+}
+
+@article{vellekoop2007focusing,
+    author  = {Vellekoop, I. M. and Mosk, A. P.},
+    title   = {Focusing coherent light through opaque strongly scattering media},
+    journal = {Optics Letters},
+    year    = {2007},
+    volume  = {32},
+    number  = {16},
+    pages   = {2309--2311}
+}
+
+@article{papadopoulos2012focusing,
+    author  = {Papadopoulos, I. N. and Farahi, S. and Moser, C. and Psaltis, D.},
+    title   = {Focusing and scanning light through a multimode optical fiber using digital phase conjugation},
+    journal = {Optics Express},
+    year    = {2012},
+    volume  = {20},
+    number  = {10},
+    pages   = {10583--10590}
+}
+
+@article{czarske2016transmission,
+    author  = {Czarske, J. W. and Haufe, D. and Koukourakis, N. and Büttner, L.},
+    title   = {Transmission of independent signals through a multimode fiber using digital optical phase conjugation},
+    journal = {Optics Express},
+    year    = {2016},
+    volume  = {24},
+    number  = {13},
+    pages   = {15128--15136}
+}
+
+@article{cizmar2011shaping,
+    author  = {Čižmár, T. and Dholakia, K.},
+    title   = {Shaping the light transmission through a multimode optical fibre: complex transformation analysis and applications in biophotonics},
+    journal = {Optics Express},
+    year    = {2011},
+    volume  = {19},
+    number  = {20},
+    pages   = {18871--18884}
+}
+
+@article{ploschner2015seeing,
+    author  = {Plöschner, M. and Tyc, T. and Čižmár, T.},
+    title   = {Seeing through chaos in multimode fibres},
+    journal = {Nature Photonics},
+    year    = {2015},
+    volume  = {9},
+    number  = {8},
+    pages   = {529--535}
+}
+
+@article{li2021memory,
+    author  = {Li, S. and Horsley, S. A. and Tyc, T. and Čižmár, T. and Phillips, D. B.},
+    title   = {Memory effect assisted imaging through multimode optical fibres},
+    journal = {Nature Communications},
+    year    = {2021},
+    volume  = {12},
+    number  = {1},
+    pages   = {3751}
+}
+
+@article{caramazza2019transmission,
+    author  = {Caramazza, P. and Moran, O. and Murray-Smith, R. and Faccio, D.},
+    title   = {Transmission of natural scene images through a multimode fibre},
+    journal = {Nature Communications},
+    year    = {2019},
+    volume  = {10},
+    number  = {1},
+    pages   = {2029}
+}
+
+@article{wang2025real,
+    author  = {Wang, Z. and Luo, J. and Shen, Y. and Wu, D. and Liang, J. and Liang, J. and Chen, Y. and Zhang, Z. and Qi, D. and Yao, Y.},
+    title   = {Real-time wavefront control of multimode fibers under dynamic perturbation},
+    journal = {Laser \& Photonics Reviews},
+    year    = {2025},
+    volume  = {19},
+    number  = {2},
+    pages   = {2400947}
+}
+
+@article{zhong2023efficient,
+    author  = {Zhong, J. and Wen, Z. and Li, Q. and Deng, Q. and Yang, Q.},
+    title   = {Efficient reference-less transmission matrix retrieval for a multimode fiber using fast fourier transform},
+    journal = {Advanced Photonics Nexus},
+    year    = {2023},
+    volume  = {2},
+    number  = {5},
+    pages   = {056007}
+}
+
+@article{yao2025efficient,
+    author  = {Yao, Z. and Qin, Z. and Zhang, C. and Li, S. and Yu, H. and Gu, G. and Chen, Q. and Zhou, S. and Sui, X.},
+    title   = {An efficient scattering imaging recovering method via a multimode optical fiber},
+    journal = {Journal of Lightwave Technology},
+    year    = {2025}
+}
+
+@article{fan2021deep,
+    author  = {Fan, P. and Ruddlesden, M. and Wang, Y. and Zhao, L. and Lu, C. and Su, L.},
+    title   = {Learning enabled continuous transmission of spatially distributed information through multimode fibers},
+    journal = {Laser \& Photonics Reviews},
+    year    = {2021},
+    volume  = {15},
+    number  = {4},
+    pages   = {2000348}
+}
+
+@article{fan2021learning,
+    author  = {Fan, W. and Chen, Z. and Yakovlev, V. V. and Pu, J.},
+    title   = {High-fidelity image reconstruction through multimode fiber via polarization-enhanced parametric speckle imaging},
+    journal = {Laser \& Photonics Reviews},
+    year    = {2021},
+    volume  = {15},
+    number  = {5},
+    pages   = {2000376}
+}
+
+@article{fan2019high,
+    author  = {Fan, P. and Zhao, T. and Su, L.},
+    title   = {Deep learning the high variability and randomness inside multimode fibers},
+    journal = {Optics Express},
+    year    = {2019},
+    volume  = {27},
+    number  = {15},
+    pages   = {20241--20258}
+}
+
+@article{liu2023single,
+    author  = {Liu, Y. and Yu, P. and Wu, Y. and Wang, Z. and Li, Y. and Liang, J. and Lai, P. and Gong, L.},
+    title   = {Single-shot wide-field imaging in reflection by using a single multimode fiber},
+    journal = {Applied Physics Letters},
+    year    = {2023},
+    volume  = {122},
+    number  = {6},
+    pages   = {061108}
+}
+
+@article{borhani2018learning,
+    author  = {Borhani, N. and Kakkava, E. and Moser, C. and Psaltis, D.},
+    title   = {Learning to see through multimode fibers},
+    journal = {Optica},
+    year    = {2018},
+    volume  = {5},
+    number  = {8},
+    pages   = {960--966}
+}
+
+@article{yang2022single,
+    author  = {Yang, D. and Hao, M. and Wu, G. and Chang, C. and Luo, B. and Yin, L.},
+    title   = {Single multimode fiber imaging based on low-rank recovery},
+    journal = {Optics and Lasers in Engineering},
+    year    = {2022},
+    volume  = {149},
+    pages   = {106827}
+}
+
+@article{wang2022complex,
+    author  = {Wang, L. and Qi, T. and Liu, Z. and Meng, Y. and Li, D. and Yan, P. and Gong, M. and Xiao, Q.},
+    title   = {Complex pattern transmission through multimode fiber under diverse light sources},
+    journal = {APL Photonics},
+    year    = {2022},
+    volume  = {7},
+    number  = {10},
+    pages   = {106103}
+}
+
+@article{liu2022learning,
+    author  = {Liu, Y. and Zhang, Z. and Yu, P. and Wu, Y. and Wang, Z. and Li, Y. and Liu, W. and Gong, L.},
+    title   = {Learning-enabled recovering scattered data from twisted light transmitted through a long standard multimode fiber},
+    journal = {Applied Physics Letters},
+    year    = {2022},
+    volume  = {120},
+    number  = {13},
+    pages   = {131103}
+}
+
+@article{zhu2023anti,
+    author  = {Zhu, R. and Luo, J. and Zhou, X. and Feng, H. and Xu, F.},
+    title   = {Anti-perturbation multimode fiber imaging based on the active measurement of the fiber configuration},
+    journal = {ACS Photonics},
+    year    = {2023},
+    volume  = {10},
+    number  = {10},
+    pages   = {3476--3483}
+}
+
+@article{rahmani2018multimode,
+    author  = {Rahmani, B. and Loterie, D. and Konstantinou, G. and Psaltis, D. and Moser, C.},
+    title   = {Multimode optical fiber transmission with a deep learning network},
+    journal = {Light: Science \& Applications},
+    year    = {2018},
+    volume  = {7},
+    number  = {1},
+    pages   = {69}
+}
+
+@article{zhan2024enhanced,
+    author  = {Zhan, N. and Yu, Z. and Cheng, L. and Ma, J. and Di, J. and Lan, Y. and Xu, K.},
+    title   = {Enhanced ultrafine multimode fiber imaging based on mode modulation through singular value decomposition},
+    journal = {Photonics Research},
+    year    = {2024},
+    volume  = {12},
+    number  = {10},
+    pages   = {2214--2225}
+}
+
+@article{abdulaziz2023robust,
+    author  = {Abdulaziz, A. and Mekhail, S. P. and Altmann, Y. and Padgett, M. J. and McLaughlin, S.},
+    title   = {Robust real-time imaging through flexible multimode fibers},
+    journal = {Scientific Reports},
+    year    = {2023},
+    volume  = {13},
+    number  = {1},
+    pages   = {11371}
+}
+
+@article{tu2025deep,
+    author  = {Tu, H. and Liu, H. and Pan, T. and Xie, W. and Ma, Z. and Zhang, F. and Xu, P. and Wu, L. and Xu, O. and Xu, Y.},
+    title   = {Deep empirical neural network for optical phase retrieval over a scattering medium},
+    journal = {Nature Communications},
+    year    = {2025},
+    volume  = {16},
+    number  = {1},
+    pages   = {1369}
+}
+
+@article{collard2024exploiting,
+    author  = {Collard, L. and Kazemzadeh, M. and Piscopo, L. and De Vittorio, M. and Pisanello, F.},
+    title   = {Exploiting holographically encoded variance to transmit labelled images through a multimode optical fiber},
+    journal = {Optics Express},
+    year    = {2024},
+    volume  = {32},
+    number  = {11},
+    pages   = {18896--18908}
+}
+
+@article{yu2025all,
+    author  = {Yu, H. and Huang, Z. and Lamon, S. and Wang, B. and Ding, H. and Lin, J. and Wang, Q. and Luan, H. and Gu, M. and Zhang, Q.},
+    title   = {All-optical image transportation through a multimode fibre using a miniaturized diffractive neural network on the distal facet},
+    journal = {Nature Photonics},
+    year    = {2025},
+    pages   = {1--8}
+}
+
+@article{gomes2022near,
+    author  = {Gomes, A. D. and Turtaev, S. and Du, Y. and Čižmár, T.},
+    title   = {Near perfect focusing through multimode fibres},
+    journal = {Optics Express},
+    year    = {2022},
+    volume  = {30},
+    number  = {7},
+    pages   = {10645--10663}
+}
+
+@inproceedings{ronneberger2015unet,
+    author    = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+    title     = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
+    booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+    year      = {2015},
+    pages     = {234--241},
+    publisher = {Springer}
+}
+
+%---------------------------------------------------------------------------%

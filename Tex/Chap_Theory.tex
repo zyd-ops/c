@@ -1,0 +1,365 @@
+% !TEX root = ../Thesis.tex
+
+\chapter{理论基础}\label{chap:theory}
+
+{
+本章将系统介绍论文研究工作所涉及的理论基础，主要包括多模光纤传输特性、深度学习方法及其在光学成像中的应用原理。首先介绍多模光纤的基本结构与分类、模式传播特性、散斑的形成机制，以及基于深度学习的多模光纤成像原理，包括全息编码、偏振编码的物理机制和双编码协同调制等关键技术；然后详细介绍深度学习的基础知识，包括人工神经网络的基本概念、卷积神经网络的核心组件和U-Net网络架构，并讨论常用的损失函数、优化算法与训练策略；最后阐述深度学习求解光学逆问题的基本框架，并介绍其在相位恢复、超分辨率成像、图像去噪和散射介质成像等领域的应用原理。
+
+\section{多模光纤及其传输特性}\label{sec:mmf_principle}
+
+\subsection{光纤的基本结构与分类}
+
+光纤是一种利用光的全反射原理进行光传输的介质，通常由纤芯（Core）、包层（Cladding）和涂覆层（Coating）三部分组成。纤芯是光传输的主要区域，具有较高的折射率；包层包裹在纤芯外部，折射率低于纤芯，用于约束光在纤芯内传播；涂覆层是最外层的保护层，用于保护光纤免受机械损伤。
+
+根据纤芯中传输的模式数量，光纤可分为单模光纤（Single-Mode Fiber, SMF）和多模光纤（Multimode Fiber, MMF）。单模光纤的纤芯直径较小（通常为8-10微米），只允许基模在其中传输，具有低色散、长传输距离等优点，广泛应用于长距离通信。多模光纤的纤芯直径较大（通常为50-200微米），可以支持多个传输模式同时传播，具有较大的数值孔径和耦合效率，但存在模式色散问题。图\ref{fig:multimode_fiber}展示了多模光纤的结构示意图及其多模传输特性。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Img/2/multi-mode fiber.png}
+    \bicaption{\enspace 多模光纤结构与传输示意图\citep{sun2024dl_fiber_imaging}}
+              {\enspace Structure and transmission diagram of multimode fiber\citep{sun2024dl_fiber_imaging}}
+    \label{fig:multimode_fiber}
+\end{figure}
+
+\subsection{多模光纤中的模式传播}
+
+光在多模光纤中的传播可以用模式理论来描述。每个传输模式对应纤芯中电磁场分布的一个本征解，具有特定的传播常数和场分布。在阶跃型多模光纤中，线偏振（LP）模式是常用的近似描述方法，第$l$阶、第$m$个LP模式记为$\text{LP}_{lm}$，其中$l$表示角向模式数，$m$表示径向模式数。
+
+多模光纤支持的模式总数$M$可由归一化频率$V$参数估算：
+\begin{equation}
+V = \frac{2\pi a}{\lambda} \text{NA}
+\end{equation}
+\begin{equation}
+M \approx \frac{V^2}{2}
+\end{equation}
+其中，$a$为纤芯半径，$\lambda$为光波长，NA为数值孔径（Numerical Aperture）。对于典型的多模光纤，支持的模式数可达数百至数千个。
+
+当光入射到多模光纤时，根据入射条件的不同，会激发不同的模式组合。这些模式在光纤中传播时，由于传播常数的差异，会产生相位延迟差异，导致模式间发生干涉。此外，光纤的弯曲、扭转、温度变化等因素会导致模式间耦合，使得能量在不同模式间转移。
+
+\subsection{散斑的形成机制}
+
+当相干光通过多模光纤传输时，由于多个传输模式的相互干涉，在光纤输出端会形成复杂的散斑图案（Speckle Pattern）。散斑图案的特征取决于以下几个因素：
+
+\begin{enumerate}
+    \item \textbf{模式干涉}：不同模式具有不同的传播相位，在输出端发生相干叠加，形成明暗相间的干涉图案。
+    
+    \item \textbf{随机相位}：光纤的微小扰动（如弯曲、温度变化）会改变各模式的相对相位，导致散斑图案发生变化。
+    
+    \item \textbf{空间相关性}：散斑场具有一定的空间相关长度，该长度与光纤的数值孔径和波长有关。
+    
+    \item \textbf{统计特性}：在充分混合的情况下，散斑强度服从负指数分布，相位服从均匀分布。
+\end{enumerate}
+
+散斑场的复振幅可以表示为所有传输模式的相干叠加：
+\begin{equation}
+E(\mathbf{r}) = \sum_{i=1}^{M} a_i e^{j\phi_i} \psi_i(\mathbf{r})
+\end{equation}
+其中，$a_i$和$\phi_i$分别为第$i$个模式的振幅和相位，$\psi_i(\mathbf{r})$为该模式在输出端的场分布，$M$为传输模式总数。
+
+散斑的复杂性使得直接从散斑图中识别原始图像信息变得极其困难，这正是多模光纤成像面临的核心挑战。
+
+\subsection{基于深度学习的多模光纤成像原理}
+
+多模光纤成像的目标是建立输入图像与输出散斑之间的映射关系，从而实现图像信息的传输和重建。这一映射关系可以抽象为一个非线性变换：
+\begin{equation}
+\mathbf{S} = \mathcal{T}(\mathbf{I})
+\end{equation}
+其中，$\mathbf{I}$表示输入图像，$\mathbf{S}$表示输出散斑图，$\mathcal{T}$表示多模光纤的传输算子。
+
+传统的多模光纤成像方法主要基于传输矩阵测量\citep{popoff2010measuring, choi2012transmission}，通过实验测量光纤在不同输入-输出模式间的传输系数，建立完整的传输矩阵模型。这些方法在理论上严格，能够精确表征光纤的传输特性，但通常需要复杂的校准过程，且对光纤的位置、弯曲、温度等环境因素高度敏感，系统稳定性要求高，难以在实际应用中推广。
+
+由于多模光纤传输过程的复杂性，深度学习方法提供了一种更加实用的数据驱动解决方案：通过大量的"图像-散斑"配对数据训练神经网络，学习从散斑到图像的逆映射$\mathcal{T}^{-1}$，从而实现图像重建。相比传统方法，深度学习方法无需显式测量传输矩阵，具有更好的鲁棒性和实时性，能够适应光纤的微小扰动。
+
+本文采用的多模光纤成像方案基于全息和偏振双编码调制，结合深度神经网络进行图像重建。整体流程包括：全息编码实现空间模式调制、偏振编码实现偏振态调制、光场耦合与散斑采集、神经网络学习散斑到图像的映射。
+
+\subsubsection{全息编码原理}
+
+全息编码是一种利用光的波动特性实现空间信息调制的技术。本文采用基于离轴傅里叶全息\citep{leith1962reconstructed, leith1964wavefront}的计算全息图（Computer-Generated Holography, CGH）生成方法\citep{lohmann1967binary}，其核心原理如下：
+
+对于给定的目标图像$\mathbf{I}(x,y)$，首先对其进行二维傅里叶变换得到频域复振幅分布：
+\begin{equation}
+\mathbf{F}(u,v) = \mathcal{F}\{\mathbf{I}(x,y)\}
+\end{equation}
+
+然后将该频谱$\mathbf{F}(u,v)$放置在傅里叶平面的离轴位置$(u_0, v_0)$，构造具有空间载频的复振幅分布。这种离轴放置使得不同的频谱位置对应不同的衍射角度，从而实现空间角度调制。对构造的复振幅场进行逆傅里叶变换，得到全息平面的复振幅：
+\begin{equation}
+H(x,y) = \mathcal{F}^{-1}\{\mathbf{F}(u-u_0, v-v_0)\}
+\end{equation}
+
+提取其相位分布$\phi(x,y) = \arg[H(x,y)]$，并进行二值化处理以适配数字微镜器件（DMD）的二值调制特性：
+\begin{equation}
+\text{DMD}(x,y) = \begin{cases} 1, & \phi(x,y) \geq 0 \\ 0, & \phi(x,y) < 0 \end{cases}
+\end{equation}
+
+这种离轴傅里叶全息方法无需迭代优化，计算效率高，生成的全息图加载到DMD上后，其+1级衍射光将携带目标图像的信息并以特定角度出射。
+
+为实现多路复用，将傅里叶平面划分为网格阵列，每个网格位置$(x_i, y_j)$对应一个全息标签。例如，在$5\times5$的网格中可定义25个全息标签。每个全息标签对应特定的衍射角度，使得光束从不同角度耦合进光纤，激发不同的空间模式组合。由于多模光纤支持的模式数量可达数千个，不同入射角度产生的散斑图案具有显著的统计差异，为后续的图像重建提供了可区分的特征基础。
+
+\subsubsection{偏振编码原理}
+
+偏振编码利用光的偏振特性作为独立的信息维度，与全息编码形成正交的编码空间。其核心思想是通过控制入射光的偏振态，在多模光纤中激发不同的偏振模式组合，从而产生具有不同统计特性的散斑图案。
+
+光波的偏振态描述了电场矢量的振动方向和形式。在多模光纤中，光波可以看作是多个本征偏振模式的叠加。由于光纤的双折射效应，不同偏振模式在传输过程中会产生不同的相位延迟和模式耦合，导致输出散斑的统计特性发生变化。
+
+本文采用偏振分束器（Beam Displacer, BD）实现偏振编码。BD是一种由双折射晶体制成的光学元件，能够根据偏振态将入射光束在空间上分离。对于特定的BD，s偏振和p偏振分量会在横向产生固定的空间位移（如3.5 mm），从而形成两个分离的光束。
+
+通过精确设计计算全息图中的衍射光位置，可以使+1级衍射光选择性地通过BD的特定通道：
+\begin{itemize}
+    \item \textbf{s偏振编码}：设计全息图使衍射光落在BD的s偏振通道区域，只有s偏振分量能够通过并耦合进光纤
+    \item \textbf{p偏振编码}：设计全息图使衍射光落在BD的p偏振通道区域，只有p偏振分量能够通过并耦合进光纤
+    \item \textbf{混合偏振编码}：设计全息图使衍射光同时覆盖两个通道区域，s和p偏振分量同时通过并混合后耦合进光纤
+\end{itemize}
+
+在BD之后，通常采用四分之一波片（Quarter-Wave Plate, QWP）将线偏振光转换为圆偏振光。QWP对两个正交偏振分量引入$\pi/2$的相位差，实现偏振态转换。不同偏振态的光耦合进多模光纤后，会激发不同的偏振模式组合，产生更加多样化的散斑图案。
+
+\subsubsection{双编码协同与数据采集}
+
+全息编码和偏振编码在物理上是相互独立的：全息编码通过控制衍射光的传播角度调制空间模式组合，偏振编码通过控制入射光的偏振态调制偏振模式组合。两种编码可以同时作用，形成$N_{\text{holo}} \times N_{\text{pol}}$个独立的编码通道。例如，25个全息标签与3种偏振态组合，理论上可实现$25 \times 3 = 75$路复用传输。
+
+双编码方案的关键优势在于：所有编码信息在计算全息图生成时预先确定，通过精确控制衍射光的空间位置和相位分布实现。在数据采集过程中，光学系统（包括BD、QWP等偏振元件）保持固定配置，无需调整任何硬件，只需更换加载到DMD上的计算全息图即可切换编码状态。这种"软件定义编码"的方式显著提高了系统的稳定性、采集效率和可重复性。
+
+具体的光场调制与数据采集流程如下：
+\begin{enumerate}
+    \item \textbf{全息图生成与加载}：根据目标图像、全息标签和偏振标签，生成相应的计算全息图并加载到DMD
+    \item \textbf{光场调制}：入射相干光经DMD反射后产生+1级衍射光，经傅里叶透镜和偏振控制系统后选择性通过BD的特定通道
+    \item \textbf{光纤耦合}：调制后的光场通过耦合系统聚焦到多模光纤近端面，激发特定的模式组合
+    \item \textbf{散斑采集}：编码调制后的光在多模光纤中传输并在输出端形成散斑图案，使用CMOS相机记录散斑图像
+    \item \textbf{数据标注}：记录每个散斑图对应的原始图像、全息标签和偏振标签，构建"散斑-图像-编码参数"配对数据集
+\end{enumerate}
+
+通过遍历不同的图像、全息标签和偏振态组合，可构建大规模训练数据集。为确保数据质量，需保持光学系统稳定性，采用自动化采集流程，并对散斑图像进行归一化等预处理。
+
+\subsubsection{神经网络重建}
+
+利用采集的配对数据训练深度神经网络，学习从散斑到图像的逆映射$\mathcal{T}^{-1}$。训练完成后，网络可以对新采集的散斑图像进行快速重建，实现端到端的图像恢复。由于散斑图案中隐式包含了全息和偏振编码信息，训练后的网络实际上学习到了"散斑$\rightarrow$模式组合$\rightarrow$编码状态$\rightarrow$原始图像"的复合映射关系，能够从散斑的统计特征中解码出图像内容。具体的网络架构和训练策略将在后续章节详细介绍。
+
+
+\section{深度学习基础}\label{sec:dl_basics}
+
+深度学习是机器学习的一个分支，通过构建具有多个隐藏层的神经网络模型，实现对数据的高层次抽象和特征学习\citep{lecun2015deep}。深度学习在图像识别、自然语言处理、语音识别等领域取得了突破性进展，近年来也被广泛应用于科学计算和物理问题求解。
+
+\subsection{人工神经网络的基本概念}
+
+人工神经网络（Artificial Neural Network, ANN）是受生物神经系统启发而设计的计算模型。最基本的组成单元是神经元（Neuron），也称为感知器（Perceptron）。单个神经元接收多个输入信号，经过加权求和和非线性激活函数处理后，输出一个信号：
+\begin{equation}
+y = f\left(\sum_{i=1}^{n} w_i x_i + b\right)
+\end{equation}
+其中，$x_i$为输入，$w_i$为权重，$b$为偏置，$f(\cdot)$为激活函数。
+
+常用的激活函数包括：
+\begin{itemize}
+    \item Sigmoid函数：$\sigma(x) = \frac{1}{1+e^{-x}}$
+    \item ReLU函数：$\text{ReLU}(x) = \max(0, x)$
+    \item Tanh函数：$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$
+\end{itemize}
+
+多层神经网络通过将多个神经元按层组织，形成输入层、隐藏层和输出层。图\ref{fig:dnn}展示了典型的全连接神经网络（深度神经网络）结构。网络的训练通过反向传播算法（Backpropagation）实现，根据损失函数的梯度更新网络参数。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Img/2/DNN.png}
+    \bicaption{\enspace 全连接神经网络（深度神经网络）结构示意图\citep{sun2024dl_fiber_imaging}}
+              {\enspace Fully connected neural network (Deep Neural Network, DNN) architecture\citep{sun2024dl_fiber_imaging}}
+    \label{fig:dnn}
+\end{figure}
+
+\subsection{卷积神经网络}
+
+卷积神经网络（Convolutional Neural Network, CNN）是专门用于处理网格状数据（如图像）的深度学习模型。自LeCun等人提出LeNet\citep{lecun1998gradient}以来，CNN在图像识别领域取得了突破性进展，特别是Krizhevsky等人的AlexNet\citep{krizhevsky2012imagenet}在ImageNet竞赛中的成功，标志着深度CNN时代的到来。
+
+CNN的核心思想是利用卷积操作提取图像的局部特征，通过多层卷积和池化操作，逐步提取从低级到高级的特征表示。如图\ref{fig:cnn}所示，典型的CNN架构由多个卷积层、池化层和全连接层组成，通过逐层特征提取和抽象，最终实现对图像的高层次理解。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Img/2/cnn.png}
+    \bicaption{\enspace 卷积神经网络（CNN）结构示意图}
+              {\enspace Schematic diagram of Convolutional Neural Network (CNN) architecture}
+    \label{fig:cnn}
+\end{figure}
+
+\subsubsection{卷积层}
+
+卷积层是CNN的核心组件，通过卷积核（也称滤波器或特征检测器）对输入图像进行卷积操作。对于输入图像$\mathbf{I}$和卷积核$\mathbf{K}$，卷积操作定义为：
+\begin{equation}
+(\mathbf{I} * \mathbf{K})(i,j) = \sum_{m}\sum_{n} \mathbf{I}(i+m, j+n) \cdot \mathbf{K}(m,n)
+\end{equation}
+
+卷积操作具有以下优点：
+\begin{itemize}
+    \item \textbf{局部连接}：每个神经元只与输入的局部区域连接，减少参数数量
+    \item \textbf{参数共享}：同一卷积核在整个图像上共享，进一步减少参数
+    \item \textbf{平移不变性}：对输入的平移具有一定的鲁棒性
+\end{itemize}
+
+\subsubsection{池化层}
+
+池化（Pooling）操作用于降低特征图的空间维度，减少计算量和参数数量，同时提供一定的平移不变性。常用的池化方式包括最大池化（Max Pooling）和平均池化（Average Pooling）。
+
+\subsubsection{全连接层}
+
+全连接层通常位于CNN的末端，将提取的特征映射到输出空间。在图像分类任务中，全连接层的输出维度等于类别数；在回归任务中，输出维度等于回归目标的维度。
+
+\subsection{图像重建与分割网络}
+
+图像重建和图像分割是计算机视觉中的重要任务。图像重建旨在从降质或不完整的观测中恢复出高质量的图像；图像分割旨在将图像划分为不同的区域或目标。
+
+这两类任务都需要网络具有强大的特征提取和空间信息保持能力。编码器-解码器（Encoder-Decoder）架构是处理这类任务的有效框架。编码器通过逐层下采样提取高层语义特征，解码器通过逐层上采样恢复空间分辨率。
+
+\subsection{U-Net网络架构}
+
+U-Net是一种专为生物医学图像分割设计的全卷积网络，由Ronneberger等人于2015年提出\citep{ronneberger2015unet}。由于其优秀的性能和良好的泛化能力，U-Net已被广泛应用于各类图像重建和分割任务。图\ref{fig:unet_original}展示了原始U-Net的网络架构。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Img/2/Unet.png}
+    \bicaption{\enspace U-Net原始网络架构示意图\citep{ronneberger2015unet}}
+              {\enspace Original U-Net architecture\citep{ronneberger2015unet}}
+    \label{fig:unet_original}
+\end{figure}
+
+\subsubsection{U-Net的网络结构}
+
+U-Net采用对称的U型编码器-解码器结构，主要包括以下几个部分：
+
+\begin{enumerate}
+    \item \textbf{收缩路径（Contracting Path）}：也称为编码器，由多个卷积块和下采样操作组成。每个卷积块通常包含两个$3\times3$卷积层和ReLU激活函数。下采样通过$2\times2$最大池化实现，使特征图尺寸减半，通道数加倍。
+    
+    \item \textbf{扩张路径（Expansive Path）}：也称为解码器，由多个上采样和卷积块组成。上采样通过转置卷积（Transpose Convolution）或上采样插值实现，使特征图尺寸加倍，通道数减半。
+    
+    \item \textbf{跳跃连接（Skip Connections）}：这是U-Net的关键创新点。编码器每一层的特征图通过跳跃连接直接传递到解码器对应层，与上采样后的特征图拼接。这种设计使得网络能够同时利用高层语义信息和低层细节信息。
+    
+    \item \textbf{桥接层（Bridge Layer）}：位于网络最底层，连接编码器和解码器，特征图尺寸最小，通道数最多，包含最抽象的特征表示。
+\end{enumerate}
+
+U-Net的输入和输出尺寸相同，这使得它非常适合像素级的预测任务。
+
+\subsubsection{U-Net在图像重建中的优势}
+
+U-Net在图像重建任务中表现出色，主要原因包括：
+
+\begin{enumerate}
+    \item \textbf{多尺度特征融合}：通过编码器-解码器结构，网络能够提取和融合不同尺度的特征，既能捕捉全局结构信息，又能保留局部细节。
+    
+    \item \textbf{空间信息保持}：跳跃连接直接传递浅层特征，避免了深层网络中空间信息的丢失，使得重建图像具有更好的细节和边缘。
+    
+    \item \textbf{端到端训练}：整个网络可以端到端训练，无需人工设计特征或多阶段训练。
+    
+    \item \textbf{较少的训练样本}：相比其他深度网络，U-Net在小样本情况下也能取得良好性能，这对于数据采集成本高的应用场景尤为重要。
+    
+    \item \textbf{良好的泛化能力}：U-Net对输入图像的尺寸和内容具有较好的适应性。
+\end{enumerate}
+
+\subsubsection{U-Net的变体与改进}
+
+自U-Net提出以来，研究者提出了多种改进版本，主要包括：
+
+\begin{itemize}
+    \item \textbf{Residual U-Net}\citep{zhang2018road}：在卷积块中引入残差连接，缓解深层网络的梯度消失问题。
+    \item \textbf{Attention U-Net}\citep{oktay2018attention}：在跳跃连接中加入注意力机制，使网络能够聚焦于更重要的特征。
+    \item \textbf{Dense U-Net}\citep{li2018h}：采用密集连接，进一步增强特征复用。
+    \item \textbf{3D U-Net}\citep{cicek20163d}：将2D卷积扩展到3D，用于处理体数据。
+    \item \textbf{U-Net++}\citep{zhou2018unet++}：采用嵌套和密集的跳跃连接，改善语义gap。
+\end{itemize}
+
+
+\section{损失函数与训练策略}\label{sec:training}
+
+\subsection{常用损失函数}
+
+在图像重建任务中，常用的损失函数包括：
+
+\subsubsection{均方误差损失}
+均方误差（Mean Squared Error, MSE）损失是最常用的回归损失函数：
+\begin{equation}
+\mathcal{L}_{\text{MSE}} = \frac{1}{N}\sum_{i=1}^{N}(\hat{y}_i - y_i)^2
+\end{equation}
+其中，$\hat{y}_i$为预测值，$y_i$为真实值，$N$为样本数。MSE损失对异常值敏感，但计算简单，梯度稳定。
+
+\subsubsection{平均绝对误差损失}
+平均绝对误差（Mean Absolute Error, MAE）损失也称为L1损失：
+\begin{equation}
+\mathcal{L}_{\text{MAE}} = \frac{1}{N}\sum_{i=1}^{N}|\hat{y}_i - y_i|
+\end{equation}
+MAE损失对异常值的鲁棒性优于MSE，但在零点处不可导，可能影响训练稳定性。
+
+\subsection{优化算法}
+
+深度学习训练常用的优化算法包括\citep{ruder2016overview}：
+
+\begin{itemize}
+    \item \textbf{SGD（随机梯度下降）}\citep{robbins1951stochastic}：最基础的优化算法，通过计算小批量样本的梯度更新参数。
+    \item \textbf{Momentum}\citep{polyak1964momentum}：引入动量项，加速收敛并减少震荡。
+    \item \textbf{Adam}\citep{kingma2014adam}：自适应学习率优化算法，结合了Momentum和RMSprop的优点，是目前应用最广泛的优化器。
+    \item \textbf{AdamW}\citep{loshchilov2019adamw}：在Adam基础上改进权重衰减的实现方式。
+\end{itemize}
+
+\subsection{训练技巧}
+
+\begin{enumerate}
+    \item \textbf{学习率调度}\citep{loshchilov2017sgdr}：采用学习率衰减策略（如StepLR、CosineAnnealingLR等）可以提高训练稳定性和最终性能。
+    \item \textbf{数据增强}\citep{shorten2019survey}：通过旋转、翻转、缩放、噪声添加等操作扩充训练数据，提高模型泛化能力。
+    \item \textbf{批归一化}\citep{ioffe2015batch}：在卷积层后添加批归一化层，加速训练并提高稳定性。
+    \item \textbf{Dropout}\citep{srivastava2014dropout}：在训练过程中随机丢弃部分神经元，防止过拟合。
+\end{enumerate}
+
+
+\section{深度学习在光学成像中的应用原理}\label{sec:dl_imaging}
+
+近年来，深度学习在光学成像领域展现出巨大潜力，为解决传统方法难以处理的复杂成像问题提供了新的思路。本节将介绍深度学习在光学成像中的基本应用原理及典型应用场景。
+
+\subsection{光学逆问题的深度学习求解框架}
+
+光学成像中的许多问题本质上是逆问题，即从退化或不完整的观测数据中重建原始信息。这类问题通常可以形式化为：
+\begin{equation}
+\mathbf{y} = \mathcal{H}(\mathbf{x}) + \mathbf{n}
+\end{equation}
+其中，$\mathbf{x}$为待重建的目标图像，$\mathbf{y}$为观测数据，$\mathcal{H}(\cdot)$为成像系统的前向传输算子（通常是病态或不可逆的），$\mathbf{n}$为噪声。
+
+传统求解方法通常基于正则化优化：
+\begin{equation}
+\hat{\mathbf{x}} = \arg\min_{\mathbf{x}} \|\mathbf{y} - \mathcal{H}(\mathbf{x})\|^2 + \lambda R(\mathbf{x})
+\end{equation}
+其中，$R(\mathbf{x})$为正则化项，$\lambda$为正则化参数。这类方法需要精确的物理模型$\mathcal{H}$和人工设计的先验$R$，且计算复杂度高。
+
+深度学习方法通过数据驱动的方式，直接学习从观测$\mathbf{y}$到目标$\mathbf{x}$的逆映射$\mathcal{H}^{-1}$：
+\begin{equation}
+\hat{\mathbf{x}} = f_\theta(\mathbf{y})
+\end{equation}
+其中，$f_\theta$为深度神经网络，$\theta$为网络参数。通过大量配对数据$\{(\mathbf{y}_i, \mathbf{x}_i)\}$训练网络，使网络隐式学习到成像系统的逆过程和图像的统计先验。这种方法的优势在于：无需显式建模复杂的物理过程、推理速度快、对系统扰动具有一定鲁棒性。
+
+\subsection{相位恢复与全息重建}
+
+相位恢复是从强度测量中恢复光场复振幅相位信息的过程，是光学成像中的经典逆问题。传统方法如Gerchberg-Saxton算法需要迭代计算，收敛速度慢且易陷入局部最优。Rivenson等人\citep{rivenson2018phase}提出利用深度神经网络直接从单幅或多幅强度图中恢复相位，网络通过学习大量全息图-相位对，能够快速准确地重建相位信息。
+
+在无透镜计算成像中，Sinha等人\citep{sinha2017lensless}提出通过深度学习从衍射图案直接重建物体图像，无需迭代相位恢复过程。网络学习从衍射强度到物体的端到端映射，实现了实时成像。这类方法的核心原理是利用卷积神经网络的层次化特征提取能力，从衍射图案的复杂纹理中解码出物体信息。
+
+\subsection{超分辨率成像}
+
+光学超分辨率旨在突破衍射极限或提升成像系统的分辨率。深度学习方法通过学习低分辨率与高分辨率图像间的映射关系实现超分辨。Dong等人\citep{dong2015image}提出的SRCNN是最早将深度CNN应用于超分辨率的工作，通过三层卷积网络学习低分辨率图像块到高分辨率图像块的非线性映射。
+
+在显微成像领域，Wang等人\citep{wang2019deep}实现了跨模态超分辨率，通过深度学习将宽场荧光显微图像转换为超分辨率结构光照明显微（SIM）图像。网络学习不同成像模态间的映射关系，在无需复杂光学系统的情况下获得高分辨率图像。Nehme等人\citep{nehme2018deep}提出的Deep-STORM实现了单分子定位显微的深度学习重建，将传统需要复杂拟合的过程转化为端到端的神经网络推理。
+
+这些方法的共同原理是：深度网络通过多层非线性变换，学习从低分辨率到高分辨率的特征映射，隐式编码了图像的高频细节先验。
+
+\subsection{图像去噪与去模糊}
+
+光学成像中的噪声和模糊降质是普遍存在的问题。传统去噪方法如BM3D基于图像的自相似性，计算复杂度较高。Zhang等人\citep{zhang2017beyond}提出的DnCNN采用残差学习框架，网络学习预测噪声而非干净图像，利用批归一化加速训练。这种方法将去噪问题转化为噪声预测问题，更易于网络学习。
+
+深度学习去噪的原理在于：通过学习大量噪声-干净图像对，网络能够学习到噪声的统计特性和图像的结构先验，从而在推理时有效分离信号与噪声。相比传统方法，深度学习方法能够处理更复杂的噪声模型和退化过程。
+
+\subsection{散射介质成像}
+
+散射介质成像是一类特殊的计算成像问题，光在传播过程中经历复杂的散射过程，传统方法需要精确测量散射介质的传输矩阵。深度学习提供了一种无需显式建模散射过程的解决方案。
+
+Li等人\citep{li2018imaging}提出使用密集连接卷积网络透过毛玻璃等散射介质成像。网络将散斑图案作为输入，直接输出清晰图像，无需知晓散射介质的物理参数。这种方法的原理是：网络通过学习大量散斑-图像对，隐式学习了散射过程的逆变换。
+
+在多模光纤成像中，如第\ref{sec:mmf_principle}节所述，深度学习被用于建立散斑与图像的映射关系。Borhani等人\citep{borhani2018learning}提出通过神经网络学习多模光纤的传输特性，实现端到端的图像传输。这类应用的核心在于：多模光纤的传输过程虽然物理上复杂，但在数据层面是确定性映射，深度网络能够有效学习这种高维非线性映射。
+
+这些应用表明，深度学习在处理复杂光学逆问题时具有独特优势，特别是在传统方法难以建立精确物理模型或计算代价过高的情况下。通过数据驱动的方式，深度学习能够从大量实验数据中自动学习成像系统的特性和图像的统计规律，实现高效准确的图像重建。
+
+\section{本章小结}
+
+本章系统地介绍了论文研究所需的理论基础。首先阐述了多模光纤的基本结构、模式传播特性以及散斑的形成机制，详细介绍了基于深度学习的多模光纤成像原理，包括全息编码、偏振编码的物理机制，以及双编码协同调制和神经网络重建的基本流程；然后详细介绍了深度学习的基础知识，包括人工神经网络的基本概念、卷积神经网络的核心组件、U-Net网络的架构特点和优势，以及常用的损失函数、优化算法与训练策略；最后阐述了深度学习求解光学逆问题的基本框架，并介绍了深度学习在相位恢复、超分辨率成像、图像去噪和散射介质成像等领域的应用原理。这些理论知识为后续章节中基于深度学习的多模光纤散斑图像重建方法研究奠定了坚实基础。
+
+}
+
